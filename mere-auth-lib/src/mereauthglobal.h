@@ -3,10 +3,10 @@
 
 #include <QtCore/QtGlobal>
 
-#if defined MERE_AUTH
- #define MERE_AUTH_LIBSPEC Q_DECL_EXPORT
+#if defined MERE_AUTH_LIB
+#define MERE_AUTH_LIBSPEC Q_DECL_EXPORT
 #else
- #define MERE_AUTH_LIBSPEC Q_DECL_IMPORT
+#define MERE_AUTH_LIBSPEC Q_DECL_IMPORT
 #endif
 
 #endif // MEREAUTHGLOBAL_H

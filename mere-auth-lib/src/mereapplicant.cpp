@@ -1,19 +1,22 @@
 #include "mereapplicant.h"
 
-MereApplicant::MereApplicant(const QString &username, const QString &password, QObject *parent)
-    : QObject(parent),
-      m_username(username),
-      m_password(password)
+MereApplicant::MereApplicant(const QString username, const QString password)
+    : m_accout(username, password)
 {
 
 }
 
-const QString &MereApplicant::username()
+const MereAccount MereApplicant::account() const
 {
-    return m_username;
+    return m_accout;
 }
 
-const QString &MereApplicant::password()
+const QString MereApplicant::username() const
 {
-    return m_password;
+    return m_accout.username();
+}
+
+const QString MereApplicant::password() const
+{
+    return m_accout.password();
 }

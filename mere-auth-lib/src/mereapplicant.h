@@ -1,23 +1,20 @@
-#ifndef MEREACCOUNT_H
-#define MEREACCOUNT_H
+#ifndef MEREAPPLICANT_H
+#define MEREAPPLICANT_H
 
-#include <QObject>
+#include "mereauthglobal.h"
+#include "mereaccount.h"
 
-class MereApplicant : public QObject
+class MERE_AUTH_LIBSPEC MereApplicant
 {
-    Q_OBJECT
 public:
-    explicit MereApplicant(const QString &username, const QString &password, QObject *parent = nullptr);
+    explicit MereApplicant(const QString username, const QString password);
 
-    const QString &username();
-    const QString &password();
+    const QString username() const;
+    const QString password() const;
+    const MereAccount account() const;
 
-signals:
-
-public slots:
 private:
-    const QString &m_username;
-    const QString &m_password;
+    const MereAccount m_accout;
 };
 
-#endif // MEREACCOUNT_H
+#endif // MEREAPPLICANT_H

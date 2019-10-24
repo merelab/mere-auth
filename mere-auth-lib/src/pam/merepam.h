@@ -1,15 +1,22 @@
 #ifndef MEREPAM_H
 #define MEREPAM_H
 
+#include "../mereauthglobal.h"
 #include "../mereapplicant.h"
+
+#include <pwd.h>
+#include <unistd.h>
+#include <sys/param.h>
+#include <sys/types.h>
 #include <security/pam_appl.h>
 
-#include <QDebug>
+
 #include <QObject>
+#include <QDebug>
 
 static struct pam_conv pamc;
 
-class MerePAM : public QObject
+class MERE_AUTH_LIBSPEC MerePAM : public QObject
 {
     Q_OBJECT
 public:

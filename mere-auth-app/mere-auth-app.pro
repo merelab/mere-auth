@@ -1,12 +1,4 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2018-09-15T23:26:09
-#
-#-------------------------------------------------
-
-QT       += core gui
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       += core
 
 TARGET = mere-auth
 TEMPLATE = app
@@ -16,19 +8,19 @@ DEFINES += QT_DEPRECATED_WARNINGS MERE_AUTH
 SOURCES += \
         src/main.cpp
 
-HEADERS +=
-
-FORMS +=
-
-DEPENDPATH += . ../lib
+INCLUDEPATH += src
 INCLUDEPATH += ../include
+INCLUDEPATH += /usr/local/include
 
-LIBS += -L$$PWD/../lib -lmere-auth -lpam
+DEPENDPATH  += . ../lib
+
+LIBS += -L$$PWD/../lib -lmere-auth
 
 #
 # Install
 #
-unix{
+unix
+{
     target.path = /usr/local/bin
     INSTALLS += target
 }

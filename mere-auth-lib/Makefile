@@ -17,7 +17,7 @@ CXX           = clang++
 DEFINES       = -DQT_DEPRECATED_WARNINGS -DMERE_AUTH_LIB -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -Wall -W -pthread -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -O2 -Wall -W -pthread -fPIC $(DEFINES)
-INCPATH       = -I. -I../../mere-utils/include -I/usr/local/include/qt5 -I/usr/local/include/qt5/QtGui -I/usr/local/include/qt5/QtCore -I. -I/usr/local/include/libdrm -I/usr/local/include -I/usr/local/lib/qt5/mkspecs/freebsd-clang
+INCPATH       = -I. -Isrc -I../include -I../../mere-utils/include -I/usr/local/include -I/usr/local/include/qt5 -I/usr/local/include/qt5/QtGui -I/usr/local/include/qt5/QtCore -I. -I/usr/local/include/libdrm -I/usr/local/include -I/usr/local/lib/qt5/mkspecs/freebsd-clang
 QMAKE         = /usr/local/lib/qt5/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -557,26 +557,23 @@ moc_mereauth.cpp: src/mereauth.h \
 		/usr/local/include/qt5/QtCore/qmutex.h \
 		/usr/local/include/qt5/QtCore/qnumeric.h \
 		/usr/local/include/qt5/QtCore/qversiontagging.h \
-		src/mereapplicant.h \
-		src/mereaccount.h \
-		/usr/local/include/qt5/QtCore/QString \
-		/usr/local/include/qt5/QtCore/qstring.h \
-		/usr/local/include/qt5/QtCore/qchar.h \
-		/usr/local/include/qt5/QtCore/qbytearray.h \
-		/usr/local/include/qt5/QtCore/qrefcount.h \
-		/usr/local/include/qt5/QtCore/qnamespace.h \
-		/usr/local/include/qt5/QtCore/qarraydata.h \
-		/usr/local/include/qt5/QtCore/qstringliteral.h \
-		/usr/local/include/qt5/QtCore/qstringalgorithms.h \
-		/usr/local/include/qt5/QtCore/qstringview.h \
-		/usr/local/include/qt5/QtCore/qstringbuilder.h \
 		/usr/local/include/qt5/QtCore/QDebug \
 		/usr/local/include/qt5/QtCore/qdebug.h \
 		/usr/local/include/qt5/QtCore/qalgorithms.h \
 		/usr/local/include/qt5/QtCore/qhash.h \
+		/usr/local/include/qt5/QtCore/qchar.h \
 		/usr/local/include/qt5/QtCore/qiterator.h \
 		/usr/local/include/qt5/QtCore/qlist.h \
+		/usr/local/include/qt5/QtCore/qrefcount.h \
+		/usr/local/include/qt5/QtCore/qarraydata.h \
 		/usr/local/include/qt5/QtCore/qhashfunctions.h \
+		/usr/local/include/qt5/QtCore/qstring.h \
+		/usr/local/include/qt5/QtCore/qbytearray.h \
+		/usr/local/include/qt5/QtCore/qnamespace.h \
+		/usr/local/include/qt5/QtCore/qstringliteral.h \
+		/usr/local/include/qt5/QtCore/qstringalgorithms.h \
+		/usr/local/include/qt5/QtCore/qstringview.h \
+		/usr/local/include/qt5/QtCore/qstringbuilder.h \
 		/usr/local/include/qt5/QtCore/qpair.h \
 		/usr/local/include/qt5/QtCore/qbytearraylist.h \
 		/usr/local/include/qt5/QtCore/qstringlist.h \
@@ -606,7 +603,7 @@ moc_mereauth.cpp: src/mereauth.h \
 		/usr/local/include/qt5/QtCore/QObject \
 		moc_predefs.h \
 		/usr/local/lib/qt5/bin/moc
-	/usr/local/lib/qt5/bin/moc $(DEFINES) --include /usr/home/iklash/workspace/merelab/mere-auth/mere-auth-lib/moc_predefs.h -I/usr/local/lib/qt5/mkspecs/freebsd-clang -I/usr/home/iklash/workspace/merelab/mere-auth/mere-auth-lib -I/usr/home/iklash/workspace/merelab/mere-utils/include -I/usr/local/include/qt5 -I/usr/local/include/qt5/QtGui -I/usr/local/include/qt5/QtCore -I/usr/include/c++/v1 -I/usr/lib/clang/8.0.0/include -I/usr/include src/mereauth.h -o moc_mereauth.cpp
+	/usr/local/lib/qt5/bin/moc $(DEFINES) --include /usr/home/iklash/workspace/merelab/mere-auth/mere-auth-lib/moc_predefs.h -I/usr/local/lib/qt5/mkspecs/freebsd-clang -I/usr/home/iklash/workspace/merelab/mere-auth/mere-auth-lib -I/usr/home/iklash/workspace/merelab/mere-auth/mere-auth-lib/src -I/usr/home/iklash/workspace/merelab/mere-auth/include -I/usr/home/iklash/workspace/merelab/mere-utils/include -I/usr/local/include -I/usr/local/include/qt5 -I/usr/local/include/qt5/QtGui -I/usr/local/include/qt5/QtCore -I/usr/include/c++/v1 -I/usr/lib/clang/8.0.0/include -I/usr/include src/mereauth.h -o moc_mereauth.cpp
 
 moc_merepam.cpp: src/pam/merepam.h \
 		src/mereauthglobal.h \
@@ -690,7 +687,7 @@ moc_merepam.cpp: src/pam/merepam.h \
 		/usr/local/include/qt5/QtCore/qsharedpointer_impl.h \
 		moc_predefs.h \
 		/usr/local/lib/qt5/bin/moc
-	/usr/local/lib/qt5/bin/moc $(DEFINES) --include /usr/home/iklash/workspace/merelab/mere-auth/mere-auth-lib/moc_predefs.h -I/usr/local/lib/qt5/mkspecs/freebsd-clang -I/usr/home/iklash/workspace/merelab/mere-auth/mere-auth-lib -I/usr/home/iklash/workspace/merelab/mere-utils/include -I/usr/local/include/qt5 -I/usr/local/include/qt5/QtGui -I/usr/local/include/qt5/QtCore -I/usr/include/c++/v1 -I/usr/lib/clang/8.0.0/include -I/usr/include src/pam/merepam.h -o moc_merepam.cpp
+	/usr/local/lib/qt5/bin/moc $(DEFINES) --include /usr/home/iklash/workspace/merelab/mere-auth/mere-auth-lib/moc_predefs.h -I/usr/local/lib/qt5/mkspecs/freebsd-clang -I/usr/home/iklash/workspace/merelab/mere-auth/mere-auth-lib -I/usr/home/iklash/workspace/merelab/mere-auth/mere-auth-lib/src -I/usr/home/iklash/workspace/merelab/mere-auth/include -I/usr/home/iklash/workspace/merelab/mere-utils/include -I/usr/local/include -I/usr/local/include/qt5 -I/usr/local/include/qt5/QtGui -I/usr/local/include/qt5/QtCore -I/usr/include/c++/v1 -I/usr/lib/clang/8.0.0/include -I/usr/include src/pam/merepam.h -o moc_merepam.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -785,26 +782,23 @@ mereauth.o: src/mereauth.cpp src/mereauth.h \
 		/usr/local/include/qt5/QtCore/qmutex.h \
 		/usr/local/include/qt5/QtCore/qnumeric.h \
 		/usr/local/include/qt5/QtCore/qversiontagging.h \
-		src/mereapplicant.h \
-		src/mereaccount.h \
-		/usr/local/include/qt5/QtCore/QString \
-		/usr/local/include/qt5/QtCore/qstring.h \
-		/usr/local/include/qt5/QtCore/qchar.h \
-		/usr/local/include/qt5/QtCore/qbytearray.h \
-		/usr/local/include/qt5/QtCore/qrefcount.h \
-		/usr/local/include/qt5/QtCore/qnamespace.h \
-		/usr/local/include/qt5/QtCore/qarraydata.h \
-		/usr/local/include/qt5/QtCore/qstringliteral.h \
-		/usr/local/include/qt5/QtCore/qstringalgorithms.h \
-		/usr/local/include/qt5/QtCore/qstringview.h \
-		/usr/local/include/qt5/QtCore/qstringbuilder.h \
 		/usr/local/include/qt5/QtCore/QDebug \
 		/usr/local/include/qt5/QtCore/qdebug.h \
 		/usr/local/include/qt5/QtCore/qalgorithms.h \
 		/usr/local/include/qt5/QtCore/qhash.h \
+		/usr/local/include/qt5/QtCore/qchar.h \
 		/usr/local/include/qt5/QtCore/qiterator.h \
 		/usr/local/include/qt5/QtCore/qlist.h \
+		/usr/local/include/qt5/QtCore/qrefcount.h \
+		/usr/local/include/qt5/QtCore/qarraydata.h \
 		/usr/local/include/qt5/QtCore/qhashfunctions.h \
+		/usr/local/include/qt5/QtCore/qstring.h \
+		/usr/local/include/qt5/QtCore/qbytearray.h \
+		/usr/local/include/qt5/QtCore/qnamespace.h \
+		/usr/local/include/qt5/QtCore/qstringliteral.h \
+		/usr/local/include/qt5/QtCore/qstringalgorithms.h \
+		/usr/local/include/qt5/QtCore/qstringview.h \
+		/usr/local/include/qt5/QtCore/qstringbuilder.h \
 		/usr/local/include/qt5/QtCore/qpair.h \
 		/usr/local/include/qt5/QtCore/qbytearraylist.h \
 		/usr/local/include/qt5/QtCore/qstringlist.h \
@@ -832,6 +826,9 @@ mereauth.o: src/mereauth.cpp src/mereauth.h \
 		/usr/local/include/qt5/QtCore/qsharedpointer.h \
 		/usr/local/include/qt5/QtCore/qsharedpointer_impl.h \
 		/usr/local/include/qt5/QtCore/QObject \
+		src/mereapplicant.h \
+		src/mereaccount.h \
+		/usr/local/include/qt5/QtCore/QString \
 		src/pam/merepam.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mereauth.o src/mereauth.cpp
 

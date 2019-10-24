@@ -2,9 +2,7 @@
 #define MEREAUTH_H
 
 #include "mereauthglobal.h"
-#include "mereapplicant.h"
 
-#include <QDebug>
 #include <QObject>
 
 class MerePAM;

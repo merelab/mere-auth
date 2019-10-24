@@ -18,11 +18,14 @@ HEADERS += \
     src/pam/merepam.h \
     src/mereapplicant.h
 
+INCLUDEPATH += src
+INCLUDEPATH += ../include
 INCLUDEPATH += ../../mere-utils/include
-DEPENDPATH  +=. ../../mere-utils/lib
+INCLUDEPATH += /usr/local/include
 
-LIBS += -L../../mere-utils/lib
-LIBS += -lmere-utils -lpam
+DEPENDPATH  +=. ../../mere-utils/lib
+LIBS += -L../../mere-utils/lib  -lmere-utils
+LIBS += -lpam
 
 LIBDIR = $$PWD/../lib
 INCDIR = $$PWD/../include

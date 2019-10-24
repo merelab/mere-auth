@@ -16,7 +16,7 @@ int MerePAM::login(const MereApplicant &applicant)
     int result = pam_start(SERVICE_NAME, NULL, &converse, &handler);
     if( result != PAM_SUCCESS)
     {
-        qDebug() << pam_strerror(handler, result);
+        qDebug() << tr("%1: Failed to initiate a PAM transaction.").arg(pam_strerror(handler, result));
         return result;
     }
 
@@ -25,10 +25,10 @@ int MerePAM::login(const MereApplicant &applicant)
     // Username
     const QString strUsername = applicant.username();
     const char *username = strUsername.toUtf8().data();
-    result = pam_set_item(handler, PAM_RHOST, username);
+    result = pam_set_item(handler, PAM_RUSER, username);
     if( result != PAM_SUCCESS)
     {
-        qDebug() << pam_strerror(handler, result);
+        qDebug() << tr("%1: Failed to set authetication information (PAM_RUSER).").arg(pam_strerror(handler, result));
         pam_end(handler, result);
         return result;
     }
@@ -46,7 +46,7 @@ int MerePAM::login(const MereApplicant &applicant)
     result = pam_set_item(handler, PAM_RHOST, hostname);
     if( result != PAM_SUCCESS)
     {
-        qDebug() << pam_strerror(handler, result);
+        qDebug() << tr("%1: Failed to set authetication information (PAM_RHOST).").arg(pam_strerror(handler, result));
 
         pam_end(handler, result);
         return result;
@@ -56,7 +56,7 @@ int MerePAM::login(const MereApplicant &applicant)
     result = pam_authenticate(handler, 0);
     if (result != PAM_SUCCESS)
     {
-        qDebug() << pam_strerror(handler, result);
+        qDebug() << tr("%1: Failed to perform authentication within the PAM framework.").arg(pam_strerror(handler, result));
 
         pam_end(handler, result);
         return result;
@@ -65,7 +65,7 @@ int MerePAM::login(const MereApplicant &applicant)
     result = pam_acct_mgmt(handler, 0);
     if (result != PAM_SUCCESS)
     {
-        qDebug() << pam_strerror(handler, result);
+        qDebug() << tr("%1: Failed to perform PAM account validation procedures.").arg(pam_strerror(handler, result));
 
         pam_end(handler, result);
         return result;
@@ -74,8 +74,7 @@ int MerePAM::login(const MereApplicant &applicant)
     result = pam_setcred(handler, PAM_ESTABLISH_CRED);
     if (result != PAM_SUCCESS)
     {
-        qDebug() << pam_strerror(handler, result);
-
+        qDebug() << tr("%1: Failed to modify / delete user credentials for an authentication.").arg(pam_strerror(handler, result));
         pam_end(handler, result);
         return result;
     }
@@ -83,7 +82,7 @@ int MerePAM::login(const MereApplicant &applicant)
     result = pam_open_session(handler, 0);
     if (result != PAM_SUCCESS)
     {
-        qDebug() << pam_strerror(handler, result);
+        qDebug() << tr("%1: Failed to open a user session.").arg(pam_strerror(handler, result));
 
         pam_setcred(handler, PAM_DELETE_CRED);
         pam_end(handler, result);
@@ -95,7 +94,7 @@ int MerePAM::login(const MereApplicant &applicant)
     result = pam_get_item(handler, PAM_USER, (const void **)&username);
     if (result != PAM_SUCCESS || (pwd = getpwnam(username)) == NULL)
     {
-        qDebug() << pam_strerror(handler, result);
+        qDebug() << tr("%1: Failed to get PAM information (PAM_USER).").arg(pam_strerror(handler, result));
 
         pam_end(handler, result);
         return result;
@@ -105,7 +104,8 @@ int MerePAM::login(const MereApplicant &applicant)
     char **pam_envlist, **pam_env;
     if ((pam_envlist = pam_getenvlist(handler)) != NULL)
     {
-        for (pam_env = pam_envlist; *pam_env != NULL; ++pam_env) {
+        for (pam_env = pam_envlist; *pam_env != NULL; ++pam_env)
+        {
             putenv(*pam_env);
             free(*pam_env);
         }
@@ -120,13 +120,14 @@ int MerePAM::logout()
     int result = pam_close_session(handler, 0);
     if (result != PAM_SUCCESS)
     {
+        qDebug() << tr("%1: Failed to close an existing user session.").arg(pam_strerror(handler, result));
         qDebug() << pam_strerror(handler, result);
     }
 
     result = pam_setcred(handler, PAM_DELETE_CRED);
     if (result != PAM_SUCCESS)
     {
-        qDebug() << pam_strerror(handler, result);
+        qDebug() << tr("%1: Failed to modify / delete user credentials for an authentication.").arg(pam_strerror(handler, result));
     }
 
     pam_end(handler, result);
@@ -145,9 +146,6 @@ int MerePAM::handshake(int num_msg, const struct pam_message **msg, struct pam_r
 
     MereApplicant *applicant = static_cast<MereApplicant *>(appdata_ptr);
 
-    QString data;
-    QByteArray bytes;
-
     for (int i = 0; i < num_msg; i++)
     {
         (*resp)[i].resp = 0;
@@ -159,7 +157,8 @@ int MerePAM::handshake(int num_msg, const struct pam_message **msg, struct pam_r
             case PAM_PROMPT_ECHO_OFF:
                 {
                     const QString str = applicant->password();
-                    const char *passowrd = str.toUtf8().data();
+                    const QByteArray bytes = str.toUtf8();
+                    const char *passowrd = bytes.data();
                     (*resp)[i].resp = strdup(passowrd);
                     if ((*resp)[i].resp == NULL)
                             return fail(num_msg, resp);
@@ -169,8 +168,9 @@ int MerePAM::handshake(int num_msg, const struct pam_message **msg, struct pam_r
             // PAM asking for username
             case PAM_PROMPT_ECHO_ON:
                 {
-                    const QString str = applicant->password();
-                    const char *username = str.toUtf8().data();
+                    const QString str = applicant->username();
+                    const QByteArray bytes = str.toUtf8();
+                    const char *username = bytes.data();
                     (*resp)[i].resp = strdup(username);
                     if ((*resp)[i].resp == NULL)
                             return fail(num_msg, resp);

@@ -1,16 +1,40 @@
-#include "mereauth.h"
+#include "mere/auth/mereauth.h"
 
 #include <QDebug>
-#include <QApplication>
+#include <QCommandLineParser>
+#include <QCoreApplication>
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    QCoreApplication::setApplicationName("Mere Auth");
+    QCoreApplication::setApplicationVersion("0.0.1");
+
+    QCoreApplication app(argc, argv);
+
+    QCommandLineParser parser;
+    parser.addHelpOption();
+    parser.addVersionOption();
+
+    QCommandLineOption usernameOption(QStringList() << "u" << "username",
+                                      QCoreApplication::translate("main", "Set the username"),
+                                      "username");
+
+    QCommandLineOption passwordOption(QStringList() << "p" << "password",
+                                      QCoreApplication::translate("main", "Set the username"),
+                                      "password");
+
+    parser.addOption(usernameOption);
+    parser.addOption(passwordOption);
+
+    parser.process(QCoreApplication::arguments());
+
     MereAuth auth;
-    bool ok = auth.login("iklash", "iklash22");
+    bool ok = auth.login(parser.value(usernameOption),
+                         parser.value(passwordOption));
     if (ok)
-        qDebug() << "Yes valid user!";
+        qDebug() << "Yes, a valid user of this system.";
     else
-        qDebug() << "Sorry you don't have acces to this system!";
-    return a.exec();
+        qDebug() << "Sorry, not a valid user of this system.";
+
+    return app.exec();
 }

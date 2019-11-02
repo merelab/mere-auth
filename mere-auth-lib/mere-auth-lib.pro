@@ -1,7 +1,11 @@
 QT       += core
 
-TARGET = mere-auth
+CONFIG += c++11
+CONFIG += shared
+
+TARGET   = mere-auth
 TEMPLATE = lib
+
 
 DEFINES += QT_DEPRECATED_WARNINGS MERE_AUTH_LIB
 

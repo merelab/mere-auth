@@ -1,3 +1,4 @@
+Makefile
 include/
 lib/
 .qmake.stash

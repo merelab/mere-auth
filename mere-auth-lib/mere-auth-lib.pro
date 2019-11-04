@@ -1,6 +1,6 @@
-#include(../../mere-utils/mere-utils-lib/mere-utils-lib.pri)
+include(../../mere-utils/mere-utils-lib/mere-utils-lib.pri)
 
-QT       += core
+QT = core
 
 CONFIG += c++11
 CONFIG += shared

@@ -1,6 +1,10 @@
 include(../mere-auth-lib/mere-auth-lib.pri)
 
 QT += core
+QT -= gui
+
+CONFIG += c++11
+CONFIG += console
 
 TARGET = mere-auth
 TEMPLATE = app

@@ -1,39 +1,55 @@
-QT       += core
+include(../../mere-utils/mere-utils-lib/mere-utils-lib.pri)
+
+QT = core
 
 CONFIG += c++11
 CONFIG += shared
 
 TARGET   = mere-auth
+VERSION  = 0.0.1b
 TEMPLATE = lib
 
-
+DEFINES += LIB_CODE=\\\"$$TARGET\\\"
+DEFINES += LIB_NAME=\\\"$$TARGET\\\"
+DEFINES += LIB_VERSION=\\\"$$VERSION\\\"
 DEFINES += QT_DEPRECATED_WARNINGS MERE_AUTH_LIB
 
 SOURCES += \
-    src/mereaccount.cpp \
     src/mereauth.cpp \
-    src/pam/merepam.cpp \
-    src/mereapplicant.cpp
+    src/mereaccount.cpp \
+    src/mereapplicant.cpp \
+    src/pam/merepam.cpp
 
 HEADERS += \
+    src/mereauth.h \
     src/mereaccount.h \
     src/mereauthglobal.h \
-    src/mereauth.h \
-    src/pam/merepam.h \
-    src/mereapplicant.h
+    src/mereapplicant.h \
+    src/pam/merepam.h
 
-INCLUDEPATH += src
-INCLUDEPATH += ../include
-INCLUDEPATH += ../../mere-utils/include
-INCLUDEPATH += /usr/local/include
+DESTDIR = $$PWD/../lib
 
-DEPENDPATH  +=. ../../mere-utils/lib
-LIBS += -L../../mere-utils/lib  -lmere-utils
 LIBS += -lpam
 
-LIBDIR = $$PWD/../lib
-INCDIR = $$PWD/../include
-DESTDIR = \"$$LIBDIR\"
+defineTest(copy) {
+    source = $$1
+    target = $$2
+
+#    $$QMAKE_MKDIR $$quote($$target)
+
+    for(file, source) {
+        sdir = $${dirname(file)}
+        sdir = $$replace(sdir, "src", "")
+        path = $${target}$${sdir}
+
+        QMAKE_POST_LINK += $$QMAKE_MKDIR $$quote($$path) $$escape_expand(\\n\\t)
+        QMAKE_POST_LINK += $$QMAKE_COPY $$quote($$file) $$quote($$path) $$escape_expand(\\n\\t)
+    }
+
+    export(QMAKE_POST_LINK)
+}
+
+copy($$HEADERS, $$PWD/../include/mere/auth)
 
 #
 # Install

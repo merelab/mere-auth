@@ -20,6 +20,7 @@ class MERE_AUTH_LIBSPEC MerePAM : public QObject
 {
     Q_OBJECT
 public:
+    ~MerePAM();
     explicit MerePAM(QObject *parent = nullptr);
 
     static const char* SERVICE_NAME;

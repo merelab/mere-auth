@@ -1,6 +1,5 @@
 #include "merepam.h"
 
-const char* MerePAM::SERVICE_NAME = "mere";
 pam_handle_t* MerePAM::handler = NULL;
 
 MerePAM::~MerePAM()
@@ -8,7 +7,10 @@ MerePAM::~MerePAM()
 
 }
 
-MerePAM::MerePAM(QObject *parent) : QObject(parent)
+MerePAM::MerePAM(const QString &service, QObject *parent)
+    : QObject(parent),
+      m_service(service),
+      m_flags(0)
 {
 
 }
@@ -18,7 +20,9 @@ int MerePAM::login(const MereApplicant &applicant)
     const struct pam_conv converse = { handshake, (void *) &applicant };
 
     // why target user = NULL?
-    int result = pam_start(SERVICE_NAME, NULL, &converse, &handler);
+    const QByteArray bytes = m_service.toUtf8();
+    const char *service = bytes.data();
+    int result = pam_start(service, NULL, &converse, &handler);
     if( result != PAM_SUCCESS)
     {
         qDebug() << QString("%1: Failed to initiate a PAM transaction.").arg(pam_strerror(handler, result));
@@ -58,7 +62,7 @@ int MerePAM::login(const MereApplicant &applicant)
     }
 
     // Authenticate the applicant
-    result = pam_authenticate(handler, 0);
+    result = pam_authenticate(handler, m_flags);
     if (result != PAM_SUCCESS)
     {
         qDebug() << QString("%1: Failed to perform authentication within the PAM framework.").arg(pam_strerror(handler, result));
@@ -97,7 +101,7 @@ int MerePAM::login(const MereApplicant &applicant)
     /* get mapped user name; PAM may have changed it */
     struct passwd *pwd;
     result = pam_get_item(handler, PAM_USER, (const void **)&username);
-    if (result != PAM_SUCCESS || (pwd = getpwnam(username)) == NULL)
+    if (result != PAM_SUCCESS || (pwd = getpwnam(username)) == nullptr)
     {
         qDebug() << QString("%1: Failed to get PAM information (PAM_USER).").arg(pam_strerror(handler, result));
 
@@ -141,32 +145,32 @@ int MerePAM::logout()
 }
 
 //static
-int MerePAM::handshake(int num_msg, const struct pam_message **msg, struct pam_response **resp, void *appdata_ptr)
+int MerePAM::handshake(int num_msg, const struct pam_message **message, struct pam_response **response, void *data)
 {
     if (num_msg <= 0 || num_msg > PAM_MAX_NUM_MSG)
-            return (PAM_CONV_ERR);
+            return PAM_CONV_ERR;
 
-    *resp = (struct pam_response *) calloc(num_msg, sizeof(struct pam_response));
-    if (*resp == NULL) return PAM_BUF_ERR;
+    *response = (struct pam_response *) calloc(num_msg, sizeof(struct pam_response));
+    if (*response == NULL) return PAM_BUF_ERR;
 
-    MereApplicant *applicant = static_cast<MereApplicant *>(appdata_ptr);
+    MereApplicant *applicant = static_cast<MereApplicant *>(data);
 
     for (int i = 0; i < num_msg; i++)
     {
-        (*resp)[i].resp = 0;
-        (*resp)[i].resp_retcode = 0;
+        (*response)[i].resp = nullptr;
+        (*response)[i].resp_retcode = 0;
 
-        switch (msg[i]->msg_style)
+        switch (message[i]->msg_style)
         {
             // PAM asking for passsowd
             case PAM_PROMPT_ECHO_OFF:
                 {
                     const QString str = applicant->password();
-                    const QByteArray bytes = str.toUtf8();
-                    const char *passowrd = bytes.data();
-                    (*resp)[i].resp = strdup(passowrd);
-                    if ((*resp)[i].resp == NULL)
-                            return fail(num_msg, resp);
+                    QByteArray bytes = str.toUtf8();
+                    char *passowrd = bytes.data();
+                    (*response)[i].resp = strdup(passowrd);
+                    if ((*response)[i].resp == nullptr)
+                            return fail(num_msg, response);
                 }
                 break;
 
@@ -174,42 +178,43 @@ int MerePAM::handshake(int num_msg, const struct pam_message **msg, struct pam_r
             case PAM_PROMPT_ECHO_ON:
                 {
                     const QString str = applicant->username();
-                    const QByteArray bytes = str.toUtf8();
-                    const char *username = bytes.data();
-                    (*resp)[i].resp = strdup(username);
-                    if ((*resp)[i].resp == NULL)
-                            return fail(num_msg, resp);
+                    QByteArray bytes = str.toUtf8();
+                    char *username = bytes.data();
+
+                    (*response)[i].resp = strdup(username);
+                    if ((*response)[i].resp == NULL)
+                            return fail(num_msg, response);
                 }
                 break;
 
             case PAM_ERROR_MSG:
-                qCritical() << msg[i]->msg;
+                qCritical() << message[i]->msg;
                 break;
 
             case PAM_TEXT_INFO:
-                qInfo() << msg[i]->msg;
+                qInfo() << message[i]->msg;
                 break;
 
             default:
-                return fail(num_msg, resp);
+                return fail(num_msg, response);
         }
     }
 
-    return (PAM_SUCCESS);
+    return PAM_SUCCESS;
 }
 
 //static
-int MerePAM::fail(int num_msg, struct pam_response **resp)
+int MerePAM::fail(int num_msg, struct pam_response **response)
 {
     for (int i = 0; i < num_msg; i++)
     {
-            if ((*resp)[i].resp != NULL)
+            if ((*response)[i].resp != nullptr)
             {
-                 free((*resp)[i].resp);
-                 (*resp)[i].resp=0;
+                 free((*response)[i].resp);
+                 (*response)[i].resp = nullptr;
             }
     }
-    *resp = NULL;
+    *response = nullptr;
 
-    return (PAM_CONV_ERR);
+    return PAM_CONV_ERR;
 }

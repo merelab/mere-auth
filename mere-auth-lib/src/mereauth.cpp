@@ -6,7 +6,7 @@
 
 MereAuth::MereAuth(QObject *parent) : QObject(parent)
 {
-    m_pam = new MerePAM(parent);
+    m_pam = new MerePAM("mere", parent);
 }
 
 bool MereAuth::login(const QString &username, const QString &password)

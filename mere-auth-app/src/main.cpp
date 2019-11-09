@@ -32,9 +32,15 @@ int main(int argc, char *argv[])
     bool ok = auth.login(parser.value(usernameOption),
                          parser.value(passwordOption));
     if (ok)
+    {
         qDebug() << "Yes, a valid user of this system.";
+        ::exit(0);
+    }
     else
+    {
         qDebug() << "Sorry, not a valid user of this system.";
+        ::exit(1);
+    }
 
     return app.exec();
 }

@@ -9,7 +9,7 @@ TARGET   = mere-auth
 VERSION  = 0.0.1b
 TEMPLATE = lib
 
-DEFINES += LIB_CODE=\\\"$$TARGET\\\"
+DEFINES += LIB_CODE=\\\"auth\\\"
 DEFINES += LIB_NAME=\\\"$$TARGET\\\"
 DEFINES += LIB_VERSION=\\\"$$VERSION\\\"
 DEFINES += QT_DEPRECATED_WARNINGS MERE_AUTH_LIB
@@ -68,4 +68,8 @@ unix {
         eval(headers_$${path}.path = $$path)
         eval(INSTALLS *= headers_$${path})
     }
+
+    config.files= $$PWD/../etc/mere
+    config.path = /usr/local/etc/pam.d/
+    INSTALLS += config
 }

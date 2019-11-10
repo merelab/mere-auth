@@ -1,5 +1,5 @@
 include(../mere-auth-lib/mere-auth-lib.pri)
-include(../../mere-utils/mere-utils-lib/mere-utils-lib.pri)
+#include(../../mere-utils/mere-utils-lib/mere-utils-lib.pri)
 
 QT += core
 QT -= gui
@@ -15,6 +15,7 @@ DEFINES += QT_DEPRECATED_WARNINGS MERE_AUTH
 SOURCES += \
         src/main.cpp
 
+LIBS += -lmere-utils
 INCLUDEPATH += /usr/local/include
 
 #

@@ -30,6 +30,7 @@ HEADERS += \
 DESTDIR = $$PWD/../lib
 
 LIBS += -lpam
+LIBS += -lmere-utils
 
 defineTest(copy) {
     source = $$1

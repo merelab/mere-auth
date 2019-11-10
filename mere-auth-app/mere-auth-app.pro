@@ -1,4 +1,5 @@
 include(../mere-auth-lib/mere-auth-lib.pri)
+include(../../mere-utils/mere-utils-lib/mere-utils-lib.pri)
 
 QT += core
 QT -= gui

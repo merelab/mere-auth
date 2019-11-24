@@ -28,12 +28,38 @@ int main(int argc, char *argv[])
 
     parser.process(QCoreApplication::arguments());
 
+    QString username = parser.value(usernameOption);
+    QString password = parser.value(passwordOption);
+
     MereAuth auth;
-    bool ok = auth.login(parser.value(usernameOption),
-                         parser.value(passwordOption));
+    bool ok = auth.login(username, password);
     if (ok)
     {
         qDebug() << "Yes, a valid user of this system.";
+
+        MereUser user = auth.user(username);
+        qDebug() << "Username:" << user.name();
+        qDebug() << "Uid:" << user.uid();
+        qDebug() << "Gid:" << user.gid();
+        qDebug() << "Name:" << user.profile().name();
+
+        MereUserProfile profile = user.profile();
+        QList<MereGroup> groups = profile.groups();
+        QListIterator<MereGroup> it(groups);
+        while (it.hasNext())
+        {
+            MereGroup group = it.next();
+            qDebug() << "Gid:" << group.gid();
+            qDebug() << "Name:" << group.name();
+
+            QList<QString> members = group.members();
+            QListIterator<QString> mit(members);
+            while (mit.hasNext())
+            {
+                qDebug() << "Member:" << mit.next();
+            }
+        }
+
         ::exit(0);
     }
     else

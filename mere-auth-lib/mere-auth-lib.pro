@@ -1,5 +1,3 @@
-include(../../mere-utils/mere-utils-lib/mere-utils-lib.pri)
-
 QT = core
 
 CONFIG += c++11
@@ -18,6 +16,9 @@ SOURCES += \
     src/mereauth.cpp \
     src/mereaccount.cpp \
     src/mereapplicant.cpp \
+    src/user/meregroup.cpp \
+    src/user/mereuser.cpp \
+    src/user/mereuserprofile.cpp \
     src/pam/merepam.cpp
 
 HEADERS += \
@@ -25,9 +26,14 @@ HEADERS += \
     src/mereaccount.h \
     src/mereauthglobal.h \
     src/mereapplicant.h \
+    src/user/meregroup.h \
+    src/user/mereuser.h \
+    src/user/mereuserprofile.h \
     src/pam/merepam.h
 
 DESTDIR = $$PWD/../lib
+
+INCLUDEPATH += /usr/local/include
 
 LIBS += -lpam
 LIBS += -lmere-utils

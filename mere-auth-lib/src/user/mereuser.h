@@ -5,7 +5,7 @@
 #include "mereuserprofile.h"
 #include "meregroup.h"
 
-//#include <QString>
+#include <QObject>
 
 class MereUserProfile;
 
@@ -28,7 +28,7 @@ public:
 
     QString klass() const;
 
-    MereUserProfile profile();
+    MereUserProfile profile() const;
     void setProfile(MereUserProfile profile);
 
 private:
@@ -43,5 +43,5 @@ private:
 
     MereUserProfile m_profile;
 };
-
+//Q_DECLARE_METATYPE(MereUser);
 #endif // MEREUSER_H

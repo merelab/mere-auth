@@ -38,5 +38,5 @@ private:
     QString m_icon;
     QString m_mail;
 };
-
+//Q_DECLARE_METATYPE(MereUserProfile);
 #endif // MEREUSERPROFILE_H

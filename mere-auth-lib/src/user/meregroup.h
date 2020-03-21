@@ -26,5 +26,5 @@ private:
     QString        m_name;
     QList<QString> m_members;
 };
-
+//Q_DECLARE_METATYPE(MereGroup);
 #endif // MEREGROUP_H

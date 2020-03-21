@@ -52,7 +52,7 @@ QString MereUser::klass() const
     return m_klass;
 }
 
-MereUserProfile MereUser::profile()
+MereUserProfile MereUser::profile() const
 {
     return m_profile;
 }

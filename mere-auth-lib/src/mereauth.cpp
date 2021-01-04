@@ -2,7 +2,7 @@
 #include "mereapplicant.h"
 #include "pam/merepam.h"
 
-#include "mere/utils/merestringutils.h"
+#include "mere/utils/stringutils.h"
 
 MereAuth::MereAuth(QObject *parent) : QObject(parent)
 {
@@ -11,7 +11,7 @@ MereAuth::MereAuth(QObject *parent) : QObject(parent)
 
 bool MereAuth::login(const QString &username, const QString &password)
 {
-    if ( MereStringUtils::isBlank(username) || MereStringUtils::isBlank(password))
+    if ( Mere::Utils::StringUtils::isBlank(username) || Mere::Utils::StringUtils::isBlank(password))
     {
         qDebug() << "Username and/or passord can not be empty!";
         return false;

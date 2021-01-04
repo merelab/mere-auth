@@ -1,18 +1,21 @@
 #ifndef MEREUSER_H
 #define MEREUSER_H
 
-#include "../mereauthglobal.h"
-#include "mereuserprofile.h"
-#include "meregroup.h"
+#include "../global.h"
+#include "userprofile.h"
+#include "group.h"
 
 #include <QObject>
 
-class MereUserProfile;
+namespace Mere
+{
+namespace Auth
+{
 
-class MERE_AUTH_LIBSPEC MereUser
+class MERE_AUTH_LIBSPEC User
 {
 public:
-    explicit MereUser();
+    explicit User();
 
     unsigned int uid() const;
     void setUid(unsigned int uid);
@@ -23,25 +26,29 @@ public:
     QString name() const;
     void setName(QString name);
 
-    QList<unsigned int > groups() const;
-    void setGroups(QList<unsigned int > groups);
+    QVector<unsigned int > groups() const;
+    void setGroups(QVector<unsigned int > groups);
 
     QString klass() const;
 
-    MereUserProfile profile() const;
-    void setProfile(MereUserProfile profile);
+    UserProfile profile() const;
+    void setProfile(UserProfile profile);
 
 private:
     unsigned int m_uid;
     unsigned int m_gid;
     QString m_name;
 
-    QList<unsigned int > m_groups;
+    QVector<unsigned int > m_groups;
 
 
     QString m_klass;
 
-    MereUserProfile m_profile;
+    UserProfile m_profile;
 };
+
+}
+}
+
 //Q_DECLARE_METATYPE(MereUser);
 #endif // MEREUSER_H

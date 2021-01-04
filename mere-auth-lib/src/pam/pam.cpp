@@ -1,21 +1,18 @@
-#include "merepam.h"
+#include "pam.h"
 
-pam_handle_t* MerePAM::handler = NULL;
-
-MerePAM::~MerePAM()
+Mere::Auth::PAM::~PAM()
 {
 
 }
 
-MerePAM::MerePAM(const QString &service, QObject *parent)
-    : QObject(parent),
+Mere::Auth::PAM::PAM(const QString &service, int flags)
+    : m_flags(flags),
       m_service(service),
-      m_flags(0)
+      handler(NULL)
 {
-
 }
 
-int MerePAM::login(const MereApplicant &applicant)
+int Mere::Auth::PAM::login(const Applicant &applicant)
 {
     const struct pam_conv converse = { handshake, (void *) &applicant };
 
@@ -88,7 +85,7 @@ int MerePAM::login(const MereApplicant &applicant)
         return result;
     }
 
-    result = pam_open_session(handler, 0);
+    result = pam_open_session(handler, PAM_SILENT);
     if (result != PAM_SUCCESS)
     {
         qDebug() << QString("%1: Failed to open a user session.").arg(pam_strerror(handler, result));
@@ -124,7 +121,7 @@ int MerePAM::login(const MereApplicant &applicant)
     return result;
 }
 
-int MerePAM::logout()
+int Mere::Auth::PAM::logout()
 {
     int result = pam_close_session(handler, 0);
     if (result != PAM_SUCCESS)
@@ -145,7 +142,7 @@ int MerePAM::logout()
 }
 
 //static
-int MerePAM::handshake(int num_msg, const struct pam_message **message, struct pam_response **response, void *data)
+int Mere::Auth::PAM::handshake(int num_msg, const struct pam_message **message, struct pam_response **response, void *data)
 {
     if (num_msg <= 0 || num_msg > PAM_MAX_NUM_MSG)
             return PAM_CONV_ERR;
@@ -153,7 +150,7 @@ int MerePAM::handshake(int num_msg, const struct pam_message **message, struct p
     *response = (struct pam_response *) calloc(num_msg, sizeof(struct pam_response));
     if (*response == NULL) return PAM_BUF_ERR;
 
-    MereApplicant *applicant = static_cast<MereApplicant *>(data);
+    Applicant *applicant = static_cast<Applicant *>(data);
 
     for (int i = 0; i < num_msg; i++)
     {
@@ -204,7 +201,7 @@ int MerePAM::handshake(int num_msg, const struct pam_message **message, struct p
 }
 
 //static
-int MerePAM::fail(int num_msg, struct pam_response **response)
+int Mere::Auth::PAM::fail(int num_msg, struct pam_response **response)
 {
     for (int i = 0; i < num_msg; i++)
     {

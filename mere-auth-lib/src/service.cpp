@@ -1,15 +1,26 @@
-#include "mereauth.h"
-#include "mereapplicant.h"
-#include "pam/merepam.h"
+#include "service.h"
+#include "applicant.h"
+#include "pam/pam.h"
 
 #include "mere/utils/stringutils.h"
 
-MereAuth::MereAuth(QObject *parent) : QObject(parent)
+Mere::Auth::Service::~Service()
 {
-    m_pam = new MerePAM("mere", parent);
+    if (m_pam != nullptr)
+    {
+        delete m_pam;
+        m_pam = nullptr;
+    }
 }
 
-bool MereAuth::login(const QString &username, const QString &password)
+Mere::Auth::Service::Service(const QString &service, QObject *parent)
+    : QObject(parent),
+      m_service(service),
+      m_pam(new PAM(m_service))
+{
+}
+
+bool Mere::Auth::Service::login(const QString &username, const QString &password)
 {
     if ( Mere::Utils::StringUtils::isBlank(username) || Mere::Utils::StringUtils::isBlank(password))
     {
@@ -17,7 +28,7 @@ bool MereAuth::login(const QString &username, const QString &password)
         return false;
     }
 
-    MereApplicant applicant(username, password);
+    Applicant applicant(username, password);
 
     int result = m_pam->login(applicant);
     if (result == 0)
@@ -26,12 +37,12 @@ bool MereAuth::login(const QString &username, const QString &password)
     return result == 0;
 }
 
-bool MereAuth::logout()
+bool Mere::Auth::Service::logout()
 {
     return false;
 }
 
-MereUser MereAuth::user(const QString &username) const
+Mere::Auth::User Mere::Auth::Service::user(const QString &username) const
 {
     QByteArray b = username.toUtf8();
     char *u = b.data();
@@ -39,9 +50,9 @@ MereUser MereAuth::user(const QString &username) const
     return user(u);
 }
 
-MereUser MereAuth::user(const char *username) const
+Mere::Auth::User Mere::Auth::Service::user(const char *username) const
 {
-    MereUser user;
+    Mere::Auth::User user;
 
     struct passwd *pw;
     if ((pw = getpwnam(username)))
@@ -50,12 +61,12 @@ MereUser MereAuth::user(const char *username) const
         user.setGid(pw->pw_gid);
         user.setName(pw->pw_name);
 
-        MereUserProfile profile;
+        Mere::Auth::UserProfile profile;
         profile.setName(pw->pw_gecos);
         profile.setHome(pw->pw_dir);
         profile.setShell(pw->pw_shell);
 
-        QList<MereGroup> groups = this->groups(pw->pw_name, pw->pw_gid);
+        QVector<Group> groups = this->groups(pw->pw_name, pw->pw_gid);
         profile.setGroups(groups);
 
         user.setProfile(profile);
@@ -68,9 +79,9 @@ MereUser MereAuth::user(const char *username) const
     return user;
 }
 
-QList<MereGroup> MereAuth::groups(const char *username, const unsigned int &gid) const
+QVector<Mere::Auth::Group> Mere::Auth::Service::groups(const char *username, const unsigned int &gid) const
 {
-    QList<MereGroup> groups;
+    QVector<Group> groups;
 
     gid_t *grps;
     long ngroups_max = sysconf(_SC_NGROUPS_MAX) + 1;
@@ -89,9 +100,9 @@ QList<MereGroup> MereAuth::groups(const char *username, const unsigned int &gid)
     return groups;
 }
 
-MereGroup MereAuth::group(const unsigned int &gid) const
+Mere::Auth::Group Mere::Auth::Service::group(const unsigned int &gid) const
 {
-    MereGroup group;
+    Group group;
 
     struct group *gr;
     if ((gr = getgrgid(gid)))
@@ -99,12 +110,8 @@ MereGroup MereAuth::group(const unsigned int &gid) const
         group.setGid(gid);
         group.setName(gr->gr_name);
 
-        for (int i = 0; ; i++)
-        {
-           if (gr->gr_mem[i] == NULL)
-               break;
+        for (int i = 0; gr->gr_mem[i] != NULL; i++)
            group.addMember(gr->gr_mem[i]);
-       }
     }
     else
     {

@@ -1,4 +1,4 @@
-#include "mere/auth/mereauth.h"
+#include "mere/auth/service.h"
 
 #include <QDebug>
 #include <QCommandLineParser>
@@ -31,32 +31,26 @@ int main(int argc, char *argv[])
     QString username = parser.value(usernameOption);
     QString password = parser.value(passwordOption);
 
-    MereAuth auth;
+    Mere::Auth::Service auth;
     bool ok = auth.login(username, password);
     if (ok)
     {
         qDebug() << "Yes, a valid user of this system.";
 
-        MereUser user = auth.user(username);
+        Mere::Auth::User user = auth.user(username);
         qDebug() << "Username:" << user.name();
         qDebug() << "Uid:" << user.uid();
         qDebug() << "Gid:" << user.gid();
         qDebug() << "Name:" << user.profile().name();
 
-        MereUserProfile profile = user.profile();
-        QList<MereGroup> groups = profile.groups();
-        QListIterator<MereGroup> it(groups);
-        while (it.hasNext())
+        Mere::Auth::UserProfile profile = user.profile();
+        for (const auto &group : profile.groups())
         {
-            MereGroup group = it.next();
             qDebug() << "Gid:" << group.gid();
             qDebug() << "Name:" << group.name();
-
-            QList<QString> members = group.members();
-            QListIterator<QString> mit(members);
-            while (mit.hasNext())
+            for (const auto &member : group.members())
             {
-                qDebug() << "Member:" << mit.next();
+                qDebug() << "Member:" << member;
             }
         }
 

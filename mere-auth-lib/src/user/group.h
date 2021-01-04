@@ -1,15 +1,19 @@
 #ifndef MEREGROUP_H
 #define MEREGROUP_H
 
-#include "../mereauthglobal.h"
+#include "../global.h"
 
-#include <QList>
 #include <QString>
 
-class MERE_AUTH_LIBSPEC MereGroup
+namespace Mere
+{
+namespace Auth
+{
+
+class MERE_AUTH_LIBSPEC Group
 {
 public:
-    MereGroup();
+    Group();
 
     uint32_t gid() const;
     void setGid(uint32_t gid);
@@ -17,14 +21,17 @@ public:
     QString name() const;
     void setName(QString name);
 
-    QList<QString> members() const;
+    QVector<QString> members() const;
     void addMember(QString member);
-    void setMembers(QList<QString> members);
+    void setMembers(QVector<QString> members);
 
 private:
     uint32_t       m_gid;
     QString        m_name;
-    QList<QString> m_members;
+    QVector<QString> m_members;
 };
+
+}
+}
 //Q_DECLARE_METATYPE(MereGroup);
 #endif // MEREGROUP_H

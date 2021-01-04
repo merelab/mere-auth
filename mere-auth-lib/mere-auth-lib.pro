@@ -13,23 +13,23 @@ DEFINES += LIB_VERSION=\\\"$$VERSION\\\"
 DEFINES += QT_DEPRECATED_WARNINGS MERE_AUTH_LIB
 
 SOURCES += \
-    src/mereauth.cpp \
-    src/mereaccount.cpp \
-    src/mereapplicant.cpp \
-    src/user/meregroup.cpp \
-    src/user/mereuser.cpp \
-    src/user/mereuserprofile.cpp \
-    src/pam/merepam.cpp
+    src/account.cpp \
+    src/applicant.cpp \
+    src/pam/pam.cpp \
+    src/service.cpp \
+    src/user/group.cpp \
+    src/user/user.cpp \
+    src/user/userprofile.cpp
 
 HEADERS += \
-    src/mereauth.h \
-    src/mereaccount.h \
-    src/mereauthglobal.h \
-    src/mereapplicant.h \
-    src/user/meregroup.h \
-    src/user/mereuser.h \
-    src/user/mereuserprofile.h \
-    src/pam/merepam.h
+    src/account.h \
+    src/applicant.h \
+    src/global.h \
+    src/pam/pam.h \
+    src/service.h \
+    src/user/group.h \
+    src/user/user.h \
+    src/user/userprofile.h
 
 DESTDIR = $$PWD/../lib
 

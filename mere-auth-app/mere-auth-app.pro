@@ -13,6 +13,7 @@ TEMPLATE = app
 DEFINES += QT_DEPRECATED_WARNINGS MERE_AUTH
 
 SOURCES += \
+        src/cli.cpp \
         src/main.cpp
 
 LIBS += -lmere-utils
@@ -26,3 +27,6 @@ unix
     target.path = /usr/local/bin
     INSTALLS += target
 }
+
+HEADERS += \
+    src/cli.h

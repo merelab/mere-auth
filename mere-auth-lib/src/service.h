@@ -2,8 +2,10 @@
 #define MEREAUTH_H
 
 #include "global.h"
+#include "pam/account.h"
 #include "user/user.h"
 
+#include <pwd.h>
 #include <grp.h>
 
 #include <QObject>
@@ -26,10 +28,16 @@ public:
     bool logout();
 
     User user(const QString &username) const;
+    User user(const std::string &username) const;
     User user(const char *username) const;
 
+    std::vector<User> users(User::Type type = User::Type::All) const;
+
     Group group(const unsigned int &gid) const;
-    QVector<Group> groups(const char *username, const unsigned int &gid) const;
+    std::vector<Group> groups(const char *username, const unsigned int &gid) const;
+
+private:
+    User user(struct passwd *pwd) const;
 
 signals:
     void authenticated(User user);

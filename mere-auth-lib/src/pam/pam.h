@@ -2,7 +2,7 @@
 #define MEREPAM_H
 
 #include "../global.h"
-#include "../applicant.h"
+#include "applicant.h"
 
 #include <pwd.h>
 #include <unistd.h>
@@ -10,7 +10,6 @@
 #include <sys/types.h>
 #include <security/pam_appl.h>
 
-#include <QObject>
 #include <QDebug>
 
 namespace Mere
@@ -18,7 +17,7 @@ namespace Mere
 namespace Auth
 {
 
-class MERE_AUTH_LIBSPEC PAM : public QObject
+class MERE_AUTH_LIBSPEC PAM
 {
 public:
     ~PAM();

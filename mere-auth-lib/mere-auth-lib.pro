@@ -13,8 +13,8 @@ DEFINES += LIB_VERSION=\\\"$$VERSION\\\"
 DEFINES += QT_DEPRECATED_WARNINGS MERE_AUTH_LIB
 
 SOURCES += \
-    src/account.cpp \
-    src/applicant.cpp \
+    src/pam/account.cpp \
+    src/pam/applicant.cpp \
     src/pam/pam.cpp \
     src/service.cpp \
     src/user/group.cpp \
@@ -22,12 +22,13 @@ SOURCES += \
     src/user/userprofile.cpp
 
 HEADERS += \
-    src/account.h \
-    src/applicant.h \
+    src/pam/account.h \
+    src/pam/applicant.h \
     src/global.h \
     src/pam/pam.h \
     src/service.h \
     src/user/group.h \
+    src/user/type.h \
     src/user/user.h \
     src/user/userprofile.h
 

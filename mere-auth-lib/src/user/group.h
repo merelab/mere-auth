@@ -21,14 +21,14 @@ public:
     QString name() const;
     void setName(QString name);
 
-    QVector<QString> members() const;
+    std::vector<QString> members() const;
     void addMember(QString member);
-    void setMembers(QVector<QString> members);
+    void setMembers(std::vector<QString> members);
 
 private:
     uint32_t       m_gid;
     QString        m_name;
-    QVector<QString> m_members;
+    std::vector<QString> m_members;
 };
 
 }

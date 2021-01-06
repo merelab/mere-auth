@@ -13,7 +13,7 @@ class MERE_AUTH_LIBSPEC UserProfile
 {
 public:
     ~UserProfile();
-    explicit UserProfile();
+    UserProfile();
     explicit UserProfile(int uid);
 
     QString name() const;
@@ -25,9 +25,9 @@ public:
     QString shell() const;
     void setShell(QString shell);
 
-    QVector<Group> groups() const;
+    std::vector<Group> groups() const;
     void addGroup(const Group group);
-    void setGroups(const QVector<Group> groups);
+    void setGroups(const std::vector<Group> groups);
 
     QString icon() const;
     QString mail() const;
@@ -38,7 +38,7 @@ private:
     QString m_home;
     QString m_shell;
 
-    QVector<Group> m_groups;
+    std::vector<Group> m_groups;
 
     QString m_icon;
     QString m_mail;
@@ -46,5 +46,7 @@ private:
 
 }
 }
-//Q_DECLARE_METATYPE(MereUserProfile);
+
+//Q_DECLARE_METATYPE(UserProfile);
+
 #endif // MEREUSERPROFILE_H

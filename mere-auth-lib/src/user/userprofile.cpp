@@ -46,20 +46,21 @@ void Mere::Auth::UserProfile::setShell(QString shell)
     m_shell = shell;
 }
 
-QVector<Mere::Auth::Group> Mere::Auth::UserProfile::groups() const
+std::vector<Mere::Auth::Group> Mere::Auth::UserProfile::groups() const
 {
     return m_groups;
 }
 
 void Mere::Auth::UserProfile::addGroup(const Group group)
 {
-    m_groups.append(group);
+    m_groups.push_back(group);
 }
 
-void Mere::Auth::UserProfile::setGroups(const QVector<Group> groups)
+void Mere::Auth::UserProfile::setGroups(const std::vector<Group> groups)
 {
     m_groups.clear();
-    m_groups.append(groups);
+    for(auto &group : groups)
+        m_groups.push_back(group);
 }
 
 QString Mere::Auth::UserProfile::icon() const

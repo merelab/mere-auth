@@ -4,8 +4,7 @@
 #include "../global.h"
 #include "userprofile.h"
 #include "group.h"
-
-#include <QObject>
+#include "type.h"
 
 namespace Mere
 {
@@ -26,21 +25,36 @@ public:
     QString name() const;
     void setName(QString name);
 
-    QVector<unsigned int > groups() const;
-    void setGroups(QVector<unsigned int > groups);
+    std::vector<unsigned int > groups() const;
+    void addGroup(unsigned int group);
+    void setGroups(std::vector<unsigned int > groups);
 
     QString klass() const;
 
     UserProfile profile() const;
     void setProfile(UserProfile profile);
 
+    enum Type {
+        SuperUser  = 1 << 0,
+        SystemUser = 1 << 1,
+        NormalUser = 1 << 2,
+        UnknowUser = 1 << 3,
+        All        = 1111
+    };
+
+    Type type() const;
+
+private:
+    bool isSuperUser() const;
+    bool isSystemUser() const;
+    bool isUser() const;
+
 private:
     unsigned int m_uid;
     unsigned int m_gid;
     QString m_name;
 
-    QVector<unsigned int > m_groups;
-
+    std::vector<unsigned int> m_groups;
 
     QString m_klass;
 

@@ -25,18 +25,19 @@ void Mere::Auth::Group::setName(QString name)
     m_name = name;
 }
 
-QVector<QString> Mere::Auth::Group::members() const
+std::vector<QString> Mere::Auth::Group::members() const
 {
     return m_members;
 }
 
 void Mere::Auth::Group::addMember(QString member)
 {
-    m_members.append(member);
+    m_members.push_back(member);
 }
 
-void Mere::Auth::Group::setMembers(QVector<QString> members)
+void Mere::Auth::Group::setMembers(std::vector<QString> members)
 {
     m_members.clear();
-    m_members.append(members);
+    for(auto &member : members)
+        m_members.push_back(member);
 }

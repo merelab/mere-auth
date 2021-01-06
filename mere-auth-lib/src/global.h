@@ -1,5 +1,5 @@
-#ifndef MEREAUTHGLOBAL_H
-#define MEREAUTHGLOBAL_H
+#ifndef MERE_AUTH_GLOBAL_H
+#define MERE_AUTH_GLOBAL_H
 
 #include <QtCore/QtGlobal>
 #include <QDebug>
@@ -10,4 +10,4 @@
 #define MERE_AUTH_LIBSPEC Q_DECL_IMPORT
 #endif
 
-#endif // MEREAUTHGLOBAL_H
+#endif // MERE_AUTH_GLOBAL_H

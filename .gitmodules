@@ -1,0 +1,3 @@
+[submodule "mere-auth-cli"]
+	path = mere-auth-cli
+	url = https://github.com/merelabs/mere-auth-cli.git

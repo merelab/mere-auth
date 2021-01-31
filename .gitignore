@@ -1,6 +1,7 @@
 Makefile
 include/
 lib/
+cli/
 .qmake.stash
 moc_*
 mere-auth.pro.user

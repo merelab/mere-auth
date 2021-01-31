@@ -2,6 +2,9 @@ TEMPLATE = subdirs
 CONFIG+=ordered
 SUBDIRS = \
         mere-auth-lib     \  # mere-auth-lib
-        mere-auth-app     \  # mere-auth-app
+        mere-auth-cli     \  # mere-auth-cli
 
-mere-auth-app.depends = mere-auth-lib
+mere-auth-cli.depends = mere-auth-lib
+
+OTHER_FILES += \
+        etc/mere

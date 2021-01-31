@@ -4,3 +4,6 @@
 [submodule "cli"]
 	path = cli
 	url = https://github.com/merelabs/mere-auth-cli.git
+[submodule "lib"]
+	path = lib
+	url = https://github.com/merelabs/mere-auth-lib.git

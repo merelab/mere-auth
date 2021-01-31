@@ -2,5 +2,5 @@
 	path = mere-auth-cli
 	url = https://github.com/merelabs/mere-auth-cli.git
 [submodule "mere-auth-lib"]
-	path = mere-auth-lib
+	path = lib
 	url = https://github.com/merelabs/mere-auth-lib.git
